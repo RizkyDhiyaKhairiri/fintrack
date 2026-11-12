@@ -22,6 +22,27 @@ npm run dev
 
 ## Deployment
 
+### GitHub Pages
+
+Frontend sudah memiliki workflow GitHub Actions di `.github/workflows/deploy-pages.yml`.
+
+1. Push project ke branch `main`.
+2. Buka repository GitHub → **Settings** → **Pages**.
+3. Pada **Build and deployment**, pilih **Source: GitHub Actions**.
+4. Buka **Settings** → **Secrets and variables** → **Actions** → **Variables**.
+5. Tambahkan variable:
+
+```text
+Name: VITE_API_URL
+Value: https://your-backend-domain.com
+```
+
+URL frontend:
+
+```text
+https://RizkyDhiyaKhairiri.github.io/fintrack/
+```
+
 Deploy `frontend` to Vercel. Set:
 
 ```text
