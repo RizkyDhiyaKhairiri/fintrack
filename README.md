@@ -87,4 +87,36 @@ https://your-railway-domain.up.railway.app/api/health
 
 8. Masukkan domain Railway tanpa `/api` ke GitHub Actions variable `VITE_API_URL`, lalu jalankan ulang workflow Pages.
 
+### Vercel Functions + Supabase backend
+
+Backend production juga tersedia sebagai Vercel Function di `api/[[...path]].js`.
+
+1. Buat project gratis di Supabase.
+2. Buka **SQL Editor**, jalankan isi `supabase/schema.sql`.
+3. Di Vercel import repository ini.
+4. Set environment variables di Vercel:
+
+```text
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+JWT_SECRET=<long-random-secret>
+FRONTEND_URL=https://RizkyDhiyaKhairiri.github.io
+```
+
+5. Deploy Vercel. API tersedia di:
+
+```text
+https://your-vercel-project.vercel.app/api/health
+```
+
+6. Set GitHub Actions variable:
+
+```text
+VITE_API_URL=https://your-vercel-project.vercel.app
+```
+
+7. Jalankan ulang workflow GitHub Pages.
+
+Jangan pernah memasukkan `SUPABASE_SERVICE_ROLE_KEY` ke frontend atau GitHub repository.
+
 SQLite is included for local development only. Use managed PostgreSQL or MySQL for production persistence and multi-device use.
