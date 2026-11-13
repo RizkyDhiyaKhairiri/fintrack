@@ -12,7 +12,7 @@ function body(req) { return typeof req.body === 'string' ? JSON.parse(req.body |
 function summary(rows, period) { return { period, income: rows.filter(x => x.type === 'income').reduce((s, x) => s + Number(x.amount), 0), expense: rows.filter(x => x.type === 'expense').reduce((s, x) => s + Number(x.amount), 0), transactions: rows }; }
 
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') return send(res, 204, {});
+  if (req.method === 'OPTIONS') { Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v)); res.status(204).end(); return; }
   const parts = new URL(req.url, 'http://localhost').pathname.split('/').filter(Boolean).slice(1);
   try {
     if (parts[0] === 'health') return send(res, 200, { ok: true, service: 'fintrack-api' });
