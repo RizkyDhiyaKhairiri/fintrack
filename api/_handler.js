@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     if (parts[0] === 'auth' && parts[1] === 'register' && req.method === 'POST') {
       const { name, email, password } = body(req); if (!name || !email || !password || password.length < 6) return send(res, 400, { error: 'Nama, email, dan password minimal 6 karakter wajib diisi.' });
       const hash = await bcrypt.hash(password, 12); const user = { name: name.trim(), email: email.trim().toLowerCase(), password: hash };
-      const { data, error } = await supabase.from('users').insert(user).select('id,name,email').single(); if (error) return send(res, 409, { error: error.code === '23505' ? 'Email sudah terdaftar.' : error.message }); return send(res, 201, { token: token(data), user: data });
+      const { data, error } = await supabase.from('users').insert(user).select('id,name,email').single(); if (error) { console.error('Register database error:', error); return send(res, error.code === '23505' ? 409 : 500, { error: error.code === '23505' ? 'Email sudah terdaftar.' : `Database error: ${error.message}` }); } return send(res, 201, { token: token(data), user: data });
     }
     if (parts[0] === 'auth' && parts[1] === 'login' && req.method === 'POST') {
       const { email, password } = body(req); const { data: user, error } = await supabase.from('users').select('*').eq('email', String(email).toLowerCase()).single(); if (error || !user || !(await bcrypt.compare(password || '', user.password))) return send(res, 401, { error: 'Email atau password salah.' }); const safe = { id: user.id, name: user.name, email: user.email }; return send(res, 200, { token: token(safe), user: safe });
