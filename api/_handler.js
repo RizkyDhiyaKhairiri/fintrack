@@ -2,7 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabaseUrl = String(process.env.SUPABASE_URL || '').trim().replace(/\/rest\/v1\/?$/, '').replace(/\/$/, '');
+const supabaseKey = String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+const supabase = createClient(supabaseUrl, supabaseKey);
 const secret = process.env.JWT_SECRET;
 const cors = { 'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*', 'Access-Control-Allow-Headers': 'authorization, content-type', 'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS' };
 const send = (res, status, data) => { Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v)); res.status(status).json(data); };
@@ -36,5 +38,5 @@ export default async function handler(req, res) {
     if (parts[0] === 'targets' && parts[1] && req.method === 'DELETE') { const { error } = await supabase.from('targets').delete().eq('id', parts[1]).eq('user_id', uid); if (error) throw error; return send(res, 204, {}); }
     if (parts[0] === 'predictions') { const { data, error } = await supabase.from('transactions').select('date,type,amount').eq('user_id', uid).order('date'); if (error) throw error; const rows = Object.values(data.reduce((a, x) => { const month = x.date.slice(0, 7); const key = `${month}-${x.type}`; a[key] ||= { month, type: x.type, total: 0 }; a[key].total += Number(x.amount); return a; }, {})); const months = [...new Set(rows.map(x => x.month))]; const avg = type => { const values = months.map(m => rows.find(x => x.month === m && x.type === type)?.total || 0); return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0; }; const income = avg('income'), expense = avg('expense'); return send(res, 200, { months, history: rows, forecast: { income, expense, balance: income - expense }, message: months.length < 2 ? 'Tambahkan transaksi dari minimal 2 bulan untuk prediksi lebih akurat.' : 'Prediksi berdasarkan rata-rata histori bulanan.' }); }
     return send(res, 404, { error: 'Endpoint tidak ditemukan.' });
-  } catch (error) { return send(res, error.name === 'JsonWebTokenError' ? 401 : 500, { error: error.message || 'Server error.' }); }
+  } catch (error) { console.error('API error:', error); return send(res, error.name === 'JsonWebTokenError' ? 401 : 500, { error: error.message || 'Server error.', hint: error.message === 'fetch failed' ? 'Periksa SUPABASE_URL dan koneksi project Supabase.' : undefined }); }
 }
