@@ -6,7 +6,8 @@ const supabaseUrl = String(process.env.SUPABASE_URL || '').trim().replace(/\/res
 const supabaseKey = String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
 const supabase = createClient(supabaseUrl, supabaseKey);
 const secret = process.env.JWT_SECRET;
-const cors = { 'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*', 'Access-Control-Allow-Headers': 'authorization, content-type', 'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS' };
+const frontendOrigin = String(process.env.FRONTEND_URL || '*').trim().replace(/\/fintrack\/?$/, '').replace(/\/$/, '');
+const cors = { 'Access-Control-Allow-Origin': frontendOrigin || '*', 'Access-Control-Allow-Headers': 'authorization, content-type', 'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS' };
 const send = (res, status, data) => { Object.entries(cors).forEach(([k, v]) => res.setHeader(k, v)); res.status(status).json(data); };
 const token = user => jwt.sign({ id: user.id, name: user.name, email: user.email }, secret, { expiresIn: '30d' });
 function auth(req) { const raw = (req.headers.authorization || '').replace('Bearer ', '').trim(); return jwt.verify(raw, secret); }
