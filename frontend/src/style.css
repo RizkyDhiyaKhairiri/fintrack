@@ -72,3 +72,28 @@
   .summary-pie{width:185px;height:185px;flex-basis:185px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+/* Mobile app navigation */
+@media (max-width:800px){
+  aside{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;min-height:62px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#202031;border-top:1px solid #39394f;display:flex;justify-content:space-around;gap:4px;overflow-x:auto;box-shadow:0 -8px 24px rgba(0,0,0,.18)}
+  aside .brand,aside>.muted,aside>.side-note{display:none}
+  aside .nav{height:46px;min-width:58px;display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;white-space:normal;margin:0;padding:5px 4px;border-radius:9px;font-size:10px;line-height:1.15;color:#aaa8bb}
+  aside .nav.active{background:#6655df;color:#fff}
+  aside .nav:nth-of-type(1)::before{content:'¦';font-size:17px;line-height:17px}
+  aside .nav:nth-of-type(2)::before{content:'?';font-size:17px;line-height:17px}
+  aside .nav:nth-of-type(3)::before{content:'?';font-size:17px;line-height:17px}
+  aside .nav:nth-of-type(4)::before{content:'?';font-size:17px;line-height:17px}
+  aside .nav:nth-of-type(5)::before{content:'?';font-size:17px;line-height:17px}
+  aside .nav:nth-of-type(6)::before{content:'?';font-size:17px;line-height:17px}
+  aside .nav.logout::before{content:'?';font-size:17px;line-height:17px}
+  main{padding:20px 14px 92px;width:100%;max-width:none}
+  header{display:flex;align-items:flex-start;margin-bottom:18px}
+  .date-pill{max-width:110px}
+  .grid,.cards,.category-grid{display:grid;grid-template-columns:1fr;width:100%;gap:12px}
+  .panel,.card{width:100%;min-width:0}
+  .financial-summary .summary-layout{flex-direction:column;gap:18px}
+  .financial-summary .summary-pie{width:190px;height:190px;flex-basis:190px}
+  .summary-legend{width:100%}
+  .daily-head{flex-wrap:wrap}
+  .daily-total{width:100%;margin-left:0}
+}
+@media(max-width:380px){aside .nav{font-size:9px;min-width:48px}.nav{padding-left:2px!important;padding-right:2px!important}main{padding-left:10px;padding-right:10px}.date-pill{font-size:9px}}
