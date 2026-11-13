@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
 
-const API = `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api`;
+const API = `${import.meta.env.VITE_API_URL || window.location.origin}/api`;
 const money = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(n || 0);
 const formatAmount = value => { const digits = String(value).replace(/\D/g, ''); return digits ? Number(digits).toLocaleString('id-ID') : ''; };
 const parseAmount = value => Number(String(value).replace(/\./g, '').replace(/\D/g, ''));
