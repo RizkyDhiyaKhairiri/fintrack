@@ -65,4 +65,26 @@ https://RizkyDhiyaKhairiri.github.io
 
 Setelah Render memberi URL backend, masukkan URL tersebut sebagai variable GitHub Actions `VITE_API_URL`, lalu jalankan ulang workflow Pages.
 
+### Railway backend
+
+1. Buka Railway dan pilih **New Project → Deploy from GitHub repo**.
+2. Pilih repository `RizkyDhiyaKhairiri/fintrack`.
+3. Buka service → **Settings** → set **Root Directory** menjadi `/backend`.
+4. Railway memakai `npm start` dan health check `/api/health` dari `backend/railway.toml`.
+5. Tambahkan variables:
+
+```text
+JWT_SECRET=<long-random-secret>
+FRONTEND_URL=https://RizkyDhiyaKhairiri.github.io
+```
+
+6. Generate public domain pada **Settings → Networking → Generate Domain**.
+7. Tes:
+
+```text
+https://your-railway-domain.up.railway.app/api/health
+```
+
+8. Masukkan domain Railway tanpa `/api` ke GitHub Actions variable `VITE_API_URL`, lalu jalankan ulang workflow Pages.
+
 SQLite is included for local development only. Use managed PostgreSQL or MySQL for production persistence and multi-device use.
