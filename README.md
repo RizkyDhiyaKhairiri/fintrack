@@ -57,4 +57,12 @@ JWT_SECRET=<long-random-secret>
 FRONTEND_URL=https://your-frontend.vercel.app
 ```
 
+Render blueprint tersedia di `render.yaml`. Pada Render pilih **New → Blueprint**, pilih repository ini, lalu isi `FRONTEND_URL` dengan:
+
+```text
+https://RizkyDhiyaKhairiri.github.io
+```
+
+Setelah Render memberi URL backend, masukkan URL tersebut sebagai variable GitHub Actions `VITE_API_URL`, lalu jalankan ulang workflow Pages.
+
 SQLite is included for local development only. Use managed PostgreSQL or MySQL for production persistence and multi-device use.
